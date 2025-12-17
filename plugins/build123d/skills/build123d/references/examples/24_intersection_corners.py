@@ -4,6 +4,8 @@ Mode.INTERSECT: Reliable Corner Radii
 
 RectangleRounded + extrude(mode=Mode.INTERSECT) trims corners reliably.
 Use when fillet() fails on complex geometry.
+
+Run with: uvx --from build123d python 24_intersection_corners.py
 """
 from build123d import *
 
@@ -33,3 +35,4 @@ with BuildPart() as bracket:
 
 result = bracket.part
 export_gltf(result, "./24_intersection_corners.glb", binary=True)
+print("Exported 24_intersection_corners.glb")

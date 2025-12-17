@@ -7,6 +7,8 @@ Recommended order for complex parts:
 2. Major features (bosses, protrusions)
 3. Cuts (holes, slots)
 4. Final trimming (RectangleRounded + INTERSECT for corner radii)
+
+Run with: uvx --from build123d python 26_construction_sequence.py
 """
 from build123d import *
 
@@ -43,3 +45,4 @@ with BuildPart() as bracket:
 
 result = bracket.part
 export_gltf(result, "./26_construction_sequence.glb", binary=True)
+print("Exported 26_construction_sequence.glb")

@@ -6,6 +6,8 @@ Plane.XZ.offset(25) = plane moved 25mm in Y direction (distance)
 Locations((-30, 15)) = position ON that plane (coordinates)
 
 These are NOT the same! Don't confuse them.
+
+Run with: uvx --from build123d python 22_plane_offsets_positions.py
 """
 from build123d import *
 
@@ -33,3 +35,4 @@ with BuildPart() as demo:
 
 result = demo.part
 export_gltf(result, "./22_plane_offsets.glb", binary=True)
+print("Exported 22_plane_offsets.glb")

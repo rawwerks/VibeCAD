@@ -6,6 +6,8 @@ SlotOverall(length, width) creates rounded-rectangle profiles.
 - length = total length including rounded ends
 - width = full width (not radius!)
 - rotation=90 for vertical orientation
+
+Run with: uvx --from build123d python 23_stadium_slotoverall.py
 """
 from build123d import *
 
@@ -16,6 +18,7 @@ with BuildPart() as horizontal:
     extrude(amount=10)
 
 export_gltf(horizontal.part, "./23a_horizontal_stadium.glb", binary=True)
+print("Exported 23a_horizontal_stadium.glb")
 
 # Vertical stadium (bearing housing profile)
 with BuildPart() as vertical:
@@ -24,6 +27,7 @@ with BuildPart() as vertical:
     extrude(amount=15)
 
 export_gltf(vertical.part, "./23b_vertical_stadium.glb", binary=True)
+print("Exported 23b_vertical_stadium.glb")
 
 # Stadium as slot cutout
 with BuildPart() as slotted_plate:
@@ -34,6 +38,7 @@ with BuildPart() as slotted_plate:
     extrude(amount=8)
 
 export_gltf(slotted_plate.part, "./23c_slotted_plate.glb", binary=True)
+print("Exported 23c_slotted_plate.glb")
 
 # Stadium on side face for bearing boss
 with BuildPart() as bearing_boss:
@@ -48,3 +53,4 @@ with BuildPart() as bearing_boss:
 
 result = bearing_boss.part
 export_gltf(result, "./23d_bearing_boss.glb", binary=True)
+print("Exported 23d_bearing_boss.glb")

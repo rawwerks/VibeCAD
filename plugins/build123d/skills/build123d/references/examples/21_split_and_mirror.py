@@ -4,6 +4,8 @@ Split and Mirror: Symmetric Half-Shapes
 
 split(bisect_by=Plane.XY) keeps Z > 0 (positive normal side)
 mirror(about=Plane.XZ) duplicates features symmetrically
+
+Run with: uvx --from build123d python 21_split_and_mirror.py
 """
 from build123d import *
 
@@ -13,6 +15,7 @@ with BuildPart() as dome:
     split(bisect_by=Plane.XY)  # Keeps Z > 0
 
 export_gltf(dome.part, "./21a_hemisphere.glb", binary=True)
+print("Exported 21a_hemisphere.glb")
 
 # Split: Stadium becomes fork lugs
 with BuildPart() as fork:
@@ -27,6 +30,7 @@ with BuildPart() as fork:
     split(bisect_by=Plane.XY)  # Stadium → two lugs
 
 export_gltf(fork.part, "./21b_fork_lugs.glb", binary=True)
+print("Exported 21b_fork_lugs.glb")
 
 # Mirror: One hole → symmetric pair
 with BuildPart() as plate:
@@ -36,6 +40,7 @@ with BuildPart() as plate:
     mirror(about=Plane.XZ)  # Creates hole at (30, -15, 10)
 
 export_gltf(plate.part, "./21c_mirrored_holes.glb", binary=True)
+print("Exported 21c_mirrored_holes.glb")
 
 # Combined: Fork bracket with mirrored holes
 with BuildPart() as bracket:
@@ -56,3 +61,4 @@ with BuildPart() as bracket:
 
 result = bracket.part
 export_gltf(result, "./21d_bracket.glb", binary=True)
+print("Exported 21d_bracket.glb")

@@ -12,6 +12,8 @@ PROFILES (BuildSketch + extrude):
 - Curved edges
 - Precise dimensions
 - Symmetric features
+
+Run with: uvx --from build123d python 27_profile_vs_primitives.py
 """
 from build123d import *
 
@@ -24,12 +26,12 @@ with BuildPart() as primitive_example:
         Hole(5, depth=20)
 
 export_gltf(primitive_example.part, "./27a_primitives.glb", binary=True)
+print("Exported 27a_primitives.glb")
 
 # PROFILE approach: complex cross-section
 with BuildPart() as profile_example:
     with BuildSketch():
-        Rectangle(60, 40)
-        fillet(profile_example.vertices(), radius=8)
+        RectangleRounded(60, 40, 8)  # Rounded corners built-in
         with Locations((15, 0)):
             SlotOverall(20, 10, mode=Mode.SUBTRACT)
     extrude(amount=20)
@@ -41,6 +43,7 @@ with BuildPart() as profile_example:
     extrude(amount=15)
 
 export_gltf(profile_example.part, "./27b_profiles.glb", binary=True)
+print("Exported 27b_profiles.glb")
 
 # Decision guide example: bracket needs profiles
 with BuildPart() as bracket:
@@ -59,3 +62,4 @@ with BuildPart() as bracket:
 
 result = bracket.part
 export_gltf(result, "./27c_bracket_profiles.glb", binary=True)
+print("Exported 27c_bracket_profiles.glb")
