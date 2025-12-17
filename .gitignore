@@ -1,0 +1,21 @@
+# Generated model files
+*.glb
+*.step
+*.stl
+*.brep
+*.3mf
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp

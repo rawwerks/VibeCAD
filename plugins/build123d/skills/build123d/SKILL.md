@@ -1,148 +1,141 @@
 ---
 name: build123d
-description: Create parametric 3D CAD models using Build123D Python library. Use when the user wants to create 3D models, CAD designs, mechanical parts, or generate STL/STEP files programmatically. Triggers include requests for 3D modeling, parametric design, mechanical engineering parts, or code-based CAD.
+description: CAD modeling with build123d Python library. Use when creating 3D models, exporting to GLB/STEP/STL, or doing boolean operations (union, difference, intersection). Triggers on: CAD, 3D modeling, sphere, box, cylinder, mesh export, GLB, STEP, STL, solid modeling, parametric design.
 ---
 
-# Build123D CAD Modeling
+# build123d CAD Modeling
 
-Build123D is a Python CAD library that uses algebra-style syntax for creating parametric 3D models.
+## Zero-Setup with uv
 
-## Quick Start
+No installation required. Run any build123d script with:
 
-```python
-from build123d import *
-
-# Create a simple box with a hole
-with BuildPart() as part:
-    Box(10, 10, 5)
-    Cylinder(radius=2, height=5, mode=Mode.SUBTRACT)
-
-# Export to STL
-part.part.export_stl("output.stl")
+```bash
+uvx --from build123d python script.py
 ```
 
-## Core Concepts
+This automatically downloads build123d and runs your script. First run takes ~30s, subsequent runs are instant.
 
-### Context Managers
-
-Build123D uses three main context managers:
-
-- `BuildPart()` - For solid 3D objects
-- `BuildSketch()` - For 2D sketches
-- `BuildLine()` - For 1D paths/curves
-
-### Algebra Operations
-
-Combine shapes using algebra:
-
-```python
-# Union (add)
-result = box + cylinder
-
-# Subtract
-result = box - cylinder
-
-# Intersect
-result = box & cylinder
+**Install uv** (if not already installed):
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### Mode Parameter
+## Critical: Imports
 
-Control how shapes combine within context managers:
-
-- `Mode.ADD` - Add to existing geometry (default)
-- `Mode.SUBTRACT` - Remove from existing geometry
-- `Mode.INTERSECT` - Keep only overlapping regions
-- `Mode.REPLACE` - Replace existing geometry
-
-## Common Patterns
-
-### Parametric Box with Rounded Edges
+All exports are in the **main module**:
 
 ```python
-from build123d import *
-
-def rounded_box(length, width, height, fillet_radius):
-    with BuildPart() as part:
-        Box(length, width, height)
-        fillet(part.edges(), radius=fillet_radius)
-    return part.part
-
-model = rounded_box(20, 15, 10, 2)
-model.export_stl("rounded_box.stl")
+from build123d import Sphere, Box, Cylinder, export_gltf, export_step, export_stl
 ```
 
-### Extruded Profile
+**NEVER** use `from build123d.exporters import ...` - this module does not exist.
+
+## Quick Start Example
 
 ```python
-from build123d import *
+#!/usr/bin/env python3
+from build123d import Sphere, Box, export_gltf, Pos
 
-with BuildPart() as part:
-    with BuildSketch() as sketch:
-        Rectangle(20, 10)
-        Circle(radius=3, mode=Mode.SUBTRACT)
-    extrude(amount=5)
+# Create shapes
+sphere = Sphere(radius=20)
+box = Pos(15, 0, 0) * Box(10, 10, 10)
 
-part.part.export_stl("extruded.stl")
+# Boolean union
+result = sphere + box
+
+# Export to GLB (for web viewers, Three.js)
+export_gltf(result, "./model.glb", binary=True)
+print("Exported model.glb")
 ```
 
-### Revolved Shape
+Run it:
+```bash
+uvx --from build123d python my_model.py
+```
 
+## Geometry Inspection (Optional)
+
+Use the harness script to get geometry properties:
+
+```bash
+uvx --from build123d python scripts/harness.py my_model.py
+```
+
+Your script must define a `result` variable:
 ```python
-from build123d import *
-
-with BuildPart() as part:
-    with BuildSketch(Plane.XZ) as sketch:
-        with BuildLine() as line:
-            Polyline([(0, 0), (10, 0), (10, 5), (5, 10), (0, 10)])
-            Line(line.vertices()[-1], line.vertices()[0])
-        make_face()
-    revolve(axis=Axis.Z)
+result = final_shape  # Harness looks for this
 ```
 
-### Loft Between Profiles
+The harness outputs:
+- Bounding box (min, max, size)
+- Volume and surface area
+- Center of mass
+- Topology (vertices, edges, faces, solids)
+- GLB export
 
+## Quick Reference
+
+### Shapes
 ```python
-from build123d import *
-
-with BuildPart() as part:
-    with BuildSketch(Plane.XY) as s1:
-        Circle(radius=10)
-    with BuildSketch(Plane.XY.offset(20)) as s2:
-        Rectangle(15, 15)
-    loft()
+Box(length, width, height)
+Sphere(radius=20)
+Cylinder(radius=10, height=25)
+Cone(bottom_radius=15, top_radius=5, height=20)
+Torus(major_radius=20, minor_radius=5)
 ```
 
-## Export Options
-
+### Boolean Operations
 ```python
-# STL (mesh for 3D printing)
-part.part.export_stl("model.stl")
-
-# STEP (precise CAD format)
-part.part.export_step("model.step")
-
-# SVG (2D projection)
-part.part.export_svg("model.svg")
+union = shape1 + shape2           # Fuse
+difference = shape1 - shape2      # Cut
+intersection = shape1 & shape2    # Common volume
 ```
 
-## Positioning and Alignment
-
+### Positioning
 ```python
-from build123d import *
-
-# Position at specific location
-box = Box(10, 10, 5)
-box = Pos(5, 0, 0) * box  # Move 5 units in X
-
-# Align to origin
-box = box.locate(Align.CENTER, Align.CENTER, Align.MIN)
+from build123d import Pos, Rot
+moved = Pos(x, y, z) * shape      # Translate
+rotated = Rot(rx, ry, rz) * shape # Rotate (degrees)
 ```
 
-## Best Practices
+### Export
+```python
+export_gltf(shape, "./out.glb", binary=True)  # GLB for web
+export_step(shape, "./out.step")              # CAD interchange
+export_stl(shape, "./out.stl")                # 3D printing
+```
 
-1. **Use parameters** - Define dimensions as variables at the top for easy modification
-2. **Name your parts** - Use meaningful variable names for complex assemblies
-3. **Build incrementally** - Test each step before adding complexity
-4. **Check units** - Build123D uses millimeters by default
-5. **Validate exports** - View STL files in a mesh viewer before printing
+## Examples by Capability
+
+15 runnable examples in `references/examples/`:
+
+### Basics (01-08)
+- `01_simple_shapes.py` - Box, Sphere, Cylinder, Cone, Torus
+- `02_boolean_operations.py` - Union (+), difference (-), intersection (&)
+- `03_export_formats.py` - GLB, STEP, STL, BREP export
+- `04_positioning.py` - Pos(), Rot() transforms
+- `05_sketch_extrude.py` - 2D sketch to 3D solid
+- `06_fillet_chamfer.py` - Edge rounding and beveling
+- `07_csg_classic.py` - Classic CSG operations
+- `08_hole_pattern.py` - GridLocations for hole patterns
+
+### 3D Operations
+- `loft.py` - Connect multiple profiles
+- `vase.py` - **Revolve** + edge filtering + shelling
+- `tea_cup.py` - Revolve + **sweep** for handle
+
+### Advanced Techniques
+- `roller_coaster.py` - **Helix** + Spline curves
+- `packed_boxes.py` - **pack()** algorithm
+- `toy_truck.py` - **Joints** for assembly
+- `dual_color_3mf.py` - Multi-color 3MF export
+
+Run any example:
+```bash
+uvx --from build123d python references/examples/01_simple_shapes.py
+```
+
+## Advanced Patterns
+
+For builder mode, edge filtering, loft, sweep, revolve:
+See `references/advanced-patterns.md`
