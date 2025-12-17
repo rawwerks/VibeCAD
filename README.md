@@ -2,6 +2,8 @@
 
 A library of Claude Code skills for teaching coding agents how to use various CAD tools.
 
+Sponsored by [neThing.xyz](https://neThing.xyz)
+
 ## Installation
 
 Add the marketplace to Claude Code:
