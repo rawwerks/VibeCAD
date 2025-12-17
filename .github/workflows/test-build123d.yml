@@ -1,0 +1,93 @@
+name: Test build123d Examples
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'plugins/build123d/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'plugins/build123d/**'
+  workflow_dispatch:
+
+jobs:
+  test-examples:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        run: uv python install 3.11
+
+      - name: Run numbered examples (01-27)
+        working-directory: plugins/build123d/skills/build123d/references/examples
+        run: |
+          echo "Testing numbered examples..."
+          failed=0
+
+          for f in [0-2][0-9]_*.py; do
+            if [ -f "$f" ]; then
+              echo "=== Testing $f ==="
+              if uvx --from build123d python "$f" 2>&1; then
+                echo "✓ $f passed"
+              else
+                echo "✗ $f FAILED"
+                failed=$((failed + 1))
+              fi
+              echo ""
+            fi
+          done
+
+          if [ $failed -gt 0 ]; then
+            echo "::error::$failed example(s) failed"
+            exit 1
+          fi
+
+          echo "All numbered examples passed!"
+
+      - name: Run harness on examples with 'result' variable
+        working-directory: plugins/build123d/skills/build123d
+        run: |
+          echo "Running harness tests..."
+
+          # Examples known to have 'result' variable
+          examples=(
+            "references/examples/21_split_and_mirror.py"
+            "references/examples/22_plane_offsets_positions.py"
+            "references/examples/23_stadium_slotoverall.py"
+            "references/examples/24_intersection_corners.py"
+            "references/examples/25_face_local_coordinates.py"
+            "references/examples/26_construction_sequence.py"
+            "references/examples/27_profile_vs_primitives.py"
+          )
+
+          for example in "${examples[@]}"; do
+            if [ -f "$example" ]; then
+              echo "=== Harness: $example ==="
+              uvx --from build123d python scripts/harness.py "$example" || exit 1
+              echo ""
+            fi
+          done
+
+          echo "All harness tests passed!"
+
+      - name: Verify GLB files generated
+        working-directory: plugins/build123d/skills/build123d/references/examples
+        run: |
+          echo "Checking for generated GLB files..."
+          glb_count=$(ls -1 *.glb 2>/dev/null | wc -l)
+          echo "Found $glb_count GLB files"
+
+          if [ "$glb_count" -lt 10 ]; then
+            echo "::error::Expected at least 10 GLB files, found $glb_count"
+            exit 1
+          fi
+
+          echo "GLB generation verified!"
