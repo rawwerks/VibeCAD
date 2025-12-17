@@ -1,6 +1,6 @@
 {
   "name": "build123d",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Skills for using Build123D - a Python CAD library for creating parametric 3D models",
   "author": {
     "name": "Raymond Weitekamp",
