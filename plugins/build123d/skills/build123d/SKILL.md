@@ -169,8 +169,21 @@ assembly = gear1.build_part() + gear2.build_part()
 export_gltf(assembly, "./gears.glb", binary=True)
 ```
 
+## Visual Verification
+
+To **see** your generated models, use the `render-glb` skill:
+
+```bash
+# After exporting GLB
+npx render-glb model.glb preview.png
+# Then read preview.png to see what you built
+```
+
+See `skills/render-glb/SKILL.md` for the full visual verification workflow.
+
 ## Source Repositories
 
 - **build123d**: https://github.com/gumyr/build123d
 - **bd_warehouse**: https://github.com/gumyr/bd_warehouse
 - **gggears**: https://github.com/GarryBGoode/gggears
+- **render-glb**: https://github.com/rawwerks/render-glb
