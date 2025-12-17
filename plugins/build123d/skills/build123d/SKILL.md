@@ -1,6 +1,6 @@
 ---
 name: build123d
-description: CAD modeling with build123d Python library. Use when creating 3D models, exporting to GLB/STEP/STL, or doing boolean operations (union, difference, intersection). Triggers on: CAD, 3D modeling, sphere, box, cylinder, mesh export, GLB, STEP, STL, solid modeling, parametric design, threads, fasteners, bolts, nuts, screws, gears, pipes, flanges, bearings, bd_warehouse.
+description: CAD modeling with build123d Python library. Use when creating 3D models, exporting to GLB/STEP/STL, or doing boolean operations (union, difference, intersection). Triggers on: CAD, 3D modeling, sphere, box, cylinder, mesh export, GLB, STEP, STL, solid modeling, parametric design, threads, fasteners, bolts, nuts, screws, gears, pipes, flanges, bearings, bd_warehouse, spur gear, helical gear, bevel gear, planetary gear, ring gear, cycloid gear, rack and pinion, gggears, herringbone, gear mesh, gear train.
 ---
 
 # build123d CAD Modeling
@@ -138,7 +138,7 @@ See `references/advanced-patterns.md`
 
 ## bd_warehouse - Parametric Parts Library
 
-For threads, fasteners, gears, pipes, flanges, and bearings: See `references/bd-warehouse-reference.md`
+For threads, fasteners, simple gears, pipes, flanges, and bearings: See `references/bd-warehouse-reference.md`
 
 ```bash
 uvx --from build123d --with bd_warehouse python script.py
@@ -146,7 +146,31 @@ uvx --from build123d --with bd_warehouse python script.py
 
 Examples: `09_bd_warehouse_threads.py` through `14_bd_warehouse_bearings.py`
 
+## gggears - Advanced Gear Generation
+
+For advanced parametric gears (spur, helical, bevel, planetary, cycloid, racks): See `references/gggears-reference.md`
+
+```bash
+uvx --from build123d --with "gggears @ git+https://github.com/GarryBGoode/gggears" python script.py
+```
+
+Examples: `15_gggears_spur.py` through `20_gggears_rack.py`
+
+**Quick example:**
+```python
+from gggears import SpurGear, UP
+from build123d import export_gltf
+
+gear1 = SpurGear(number_of_teeth=12, module=2.0, height=10.0)
+gear2 = SpurGear(number_of_teeth=24, module=2.0, height=10.0)
+gear1.mesh_to(gear2, target_dir=UP)
+
+assembly = gear1.build_part() + gear2.build_part()
+export_gltf(assembly, "./gears.glb", binary=True)
+```
+
 ## Source Repositories
 
 - **build123d**: https://github.com/gumyr/build123d
 - **bd_warehouse**: https://github.com/gumyr/bd_warehouse
+- **gggears**: https://github.com/GarryBGoode/gggears

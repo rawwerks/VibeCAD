@@ -103,7 +103,22 @@ from bd_warehouse.bearing import SingleRowDeepGrooveBallBearing
 
 **Full API & examples**: See `bd-warehouse-reference.md`
 
+## gggears (Advanced Gears)
+
+Run with: `uvx --from build123d --with "gggears @ git+https://github.com/GarryBGoode/gggears" python script.py`
+
+```python
+from gggears import SpurGear, HelicalGear, BevelGear
+from gggears import SpurRingGear, HelicalRingGear
+from gggears import CycloidGear
+from gggears import InvoluteRack, HelicalRack
+from gggears import UP, DOWN, LEFT, RIGHT
+```
+
+**Full API & examples**: See `gggears-reference.md`
+
 ## Source Repositories
 
 - **build123d**: https://github.com/gumyr/build123d
 - **bd_warehouse**: https://github.com/gumyr/bd_warehouse
+- **gggears**: https://github.com/GarryBGoode/gggears
