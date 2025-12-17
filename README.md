@@ -16,7 +16,21 @@ Then install the plugins you need:
 
 ```
 /plugin install build123d@vibecad
+/plugin install render-glb@vibecad
+/plugin install gltf-transform@vibecad
 ```
+
+## Using Skills
+
+After installation, invoke skills using the format `<plugin-name>:<skill-name>`:
+
+| Plugin | Skill Invocation |
+|--------|------------------|
+| build123d | `build123d:build123d` |
+| render-glb | `render-glb:render-glb` |
+| gltf-transform | `gltf-transform:gltf-transform` |
+
+Skills are automatically triggered when Claude detects relevant tasks (CAD modeling, GLB rendering, model optimization), or you can explicitly load them.
 
 ## Available Plugins
 
@@ -26,7 +40,26 @@ Skills for using [Build123D](https://github.com/gumyr/build123d) - a Python CAD 
 
 - Algebra-style syntax for intuitive model creation
 - Parametric design patterns
-- Export to STL, STEP, and other formats
+- Export to GLB, STL, STEP, and other formats
+- Includes bd_warehouse (threads, fasteners, pipes, flanges, bearings)
+- Includes gggears (spur, helical, bevel, planetary, cycloid gears)
+
+### render-glb
+
+Render GLB 3D models to PNG images for visual verification.
+
+- Zero-setup with `bunx render-glb model.glb output.png`
+- Enables agents to see what they build and iterate visually
+- Configurable resolution and background color
+
+### gltf-transform
+
+Optimize and post-process GLB/glTF 3D models.
+
+- Draco/Meshopt compression for web delivery
+- Texture compression (WebP)
+- Mesh simplification and welding
+- Model inspection and merging
 
 ## Contributing
 
