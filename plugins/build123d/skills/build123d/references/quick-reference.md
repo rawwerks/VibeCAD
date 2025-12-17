@@ -87,3 +87,23 @@ model = sphere + box
 export_gltf(model, "./model.glb", binary=True)
 print("Exported to ./model.glb")
 ```
+
+## bd_warehouse (Parametric Parts)
+
+Run with: `uvx --from build123d --with bd_warehouse python script.py`
+
+```python
+from bd_warehouse.thread import IsoThread
+from bd_warehouse.fastener import HexNut, SocketHeadCapScrew
+from bd_warehouse.gear import SpurGear
+from bd_warehouse.pipe import Pipe
+from bd_warehouse.flange import WeldNeckFlange
+from bd_warehouse.bearing import SingleRowDeepGrooveBallBearing
+```
+
+**Full API & examples**: See `bd-warehouse-reference.md`
+
+## Source Repositories
+
+- **build123d**: https://github.com/gumyr/build123d
+- **bd_warehouse**: https://github.com/gumyr/bd_warehouse

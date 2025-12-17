@@ -1,6 +1,6 @@
 ---
 name: build123d
-description: CAD modeling with build123d Python library. Use when creating 3D models, exporting to GLB/STEP/STL, or doing boolean operations (union, difference, intersection). Triggers on: CAD, 3D modeling, sphere, box, cylinder, mesh export, GLB, STEP, STL, solid modeling, parametric design.
+description: CAD modeling with build123d Python library. Use when creating 3D models, exporting to GLB/STEP/STL, or doing boolean operations (union, difference, intersection). Triggers on: CAD, 3D modeling, sphere, box, cylinder, mesh export, GLB, STEP, STL, solid modeling, parametric design, threads, fasteners, bolts, nuts, screws, gears, pipes, flanges, bearings, bd_warehouse.
 ---
 
 # build123d CAD Modeling
@@ -103,7 +103,7 @@ export_stl(shape, "./out.stl")                # 3D printing
 
 ## Examples by Capability
 
-15 runnable examples in `references/examples/`:
+21 runnable examples in `references/examples/`:
 
 ### Basics (01-08)
 - `01_simple_shapes.py` - Box, Sphere, Cylinder, Cone, Torus
@@ -135,3 +135,18 @@ uvx --from build123d python references/examples/01_simple_shapes.py
 
 For builder mode, edge filtering, loft, sweep, revolve:
 See `references/advanced-patterns.md`
+
+## bd_warehouse - Parametric Parts Library
+
+For threads, fasteners, gears, pipes, flanges, and bearings: See `references/bd-warehouse-reference.md`
+
+```bash
+uvx --from build123d --with bd_warehouse python script.py
+```
+
+Examples: `09_bd_warehouse_threads.py` through `14_bd_warehouse_bearings.py`
+
+## Source Repositories
+
+- **build123d**: https://github.com/gumyr/build123d
+- **bd_warehouse**: https://github.com/gumyr/bd_warehouse
