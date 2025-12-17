@@ -1,0 +1,16 @@
+{
+  "name": "vibecad",
+  "owner": {
+    "name": "Raymond Weitekamp",
+    "email": "raymond@nething.xyz"
+  },
+  "plugins": [
+    {
+      "name": "build123d",
+      "source": "./plugins/build123d",
+      "description": "Skills for using Build123D - a Python CAD library for creating parametric 3D models with code",
+      "version": "0.1.0",
+      "keywords": ["cad", "3d", "parametric", "python", "build123d"]
+    }
+  ]
+}

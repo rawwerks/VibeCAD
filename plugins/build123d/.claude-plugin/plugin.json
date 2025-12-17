@@ -1,0 +1,13 @@
+{
+  "name": "build123d",
+  "version": "0.1.0",
+  "description": "Skills for using Build123D - a Python CAD library for creating parametric 3D models",
+  "author": {
+    "name": "Raymond Weitekamp",
+    "email": "raymond@nething.xyz"
+  },
+  "homepage": "https://github.com/raymondweitekamp/VibeCAD",
+  "repository": "https://github.com/raymondweitekamp/VibeCAD",
+  "license": "MIT",
+  "keywords": ["cad", "3d", "parametric", "python", "build123d", "modeling"]
+}
