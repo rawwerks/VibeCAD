@@ -212,3 +212,42 @@ export_3mf(mesher.mesh, "./multicolor.3mf")
 ```
 
 Example: `dual_color_3mf.py`
+
+## Geometric Reasoning for Complex Parts
+
+### Construction Sequence
+
+Build in this order for best results:
+1. **Foundation** - base shape first
+2. **Major features** - bosses, protrusions
+3. **Cuts** - holes, slots, pockets
+4. **Fillets/chamfers** - after all geometry exists
+5. **Final trimming** - Mode.INTERSECT for corner radii
+
+### Choosing Your Approach
+
+| Feature Type | Best Approach |
+|--------------|---------------|
+| Flat base with outline | Profile extrusion |
+| Curved protrusion | SlotOverall + extrude |
+| Symmetric half-shape | Full shape + split |
+| Repeated features | Single + mirror or pattern |
+| Corner rounding | RectangleRounded + INTERSECT |
+
+### When to Use Profiles vs Primitives
+
+**Primitives** (Box, Cylinder): Simple geometry, few features, quick prototypes
+
+**Profiles** (BuildSketch + extrude): Complex cross-sections, curved edges, precise dimensions
+
+Example: `27_profile_vs_primitives.py`
+
+### Key Patterns
+
+- Save extrusion results: `boss = extrude(amount=-12)` for later face references
+- Get faces reliably: `boss.faces().sort_by(Axis.Y)[0]`
+- Split for half-shapes: `split(bisect_by=Plane.XY)` keeps Z > 0
+- Mirror for symmetry: Build ONE feature, mirror for the copy
+- Corner radii via intersection: More reliable than fillet on complex parts
+
+Examples: `21_split_and_mirror.py` through `27_profile_vs_primitives.py`

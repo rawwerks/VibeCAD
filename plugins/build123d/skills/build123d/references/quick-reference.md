@@ -117,6 +117,35 @@ from gggears import UP, DOWN, LEFT, RIGHT
 
 **Full API & examples**: See `gggears-reference.md`
 
+## Common Mistakes
+
+### split() - Which Half You Keep
+```python
+split(bisect_by=Plane.XY)  # Keeps Z > 0 (positive normal direction)
+```
+The plane's normal points to the kept half. XY plane normal = +Z.
+
+### Plane Offset vs Position
+```python
+# offset = DISTANCE from origin plane
+Plane.XZ.offset(25)  # 25mm in +Y direction
+
+# position = COORDINATES on that plane
+with Locations((-30, 15)):  # X=-30, Z=15 on offset plane
+```
+
+### Stadium Shapes
+Use `SlotOverall(length, width)`, not Circle+Rectangle+Circle.
+Width is FULL width, not radius.
+
+### Face Coordinates
+Faces have LOCAL coordinate systems. `(0, 0)` on a face ≠ `(0, 0, 0)` in global space.
+
+### Symmetry
+Use `mirror(about=Plane.XZ)`, not manual duplication.
+
+**Examples**: See `21_split_and_mirror.py` through `27_profile_vs_primitives.py`
+
 ## Source Repositories
 
 - **build123d**: https://github.com/gumyr/build123d
