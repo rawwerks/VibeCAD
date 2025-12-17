@@ -181,9 +181,7 @@ bunx @gltf-transform/cli optimize model.glb optimized.glb --compress draco
 bunx render-glb model.glb preview.png
 ```
 
-See:
-- `skills/gltf-transform/SKILL.md` - compress, simplify, merge models
-- `skills/render-glb/SKILL.md` - visual verification workflow
+See the **gltf-transform** and **render-glb** plugins for full documentation.
 
 ## Source Repositories
 

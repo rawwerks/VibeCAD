@@ -1,0 +1,13 @@
+{
+  "name": "render-glb",
+  "version": "0.1.0",
+  "description": "Render GLB 3D models to PNG images for visual verification",
+  "author": {
+    "name": "Raymond Weitekamp",
+    "email": "raymond@nething.xyz"
+  },
+  "homepage": "https://github.com/rawwerks/VibeCAD",
+  "repository": "https://github.com/rawwerks/VibeCAD",
+  "license": "MIT",
+  "keywords": ["glb", "render", "3d", "png", "visualization", "verification"]
+}

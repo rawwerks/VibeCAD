@@ -11,6 +11,20 @@
       "description": "Skills for using Build123D - a Python CAD library for creating parametric 3D models with code",
       "version": "0.1.0",
       "keywords": ["cad", "3d", "parametric", "python", "build123d"]
+    },
+    {
+      "name": "render-glb",
+      "source": "./plugins/render-glb",
+      "description": "Render GLB 3D models to PNG images for visual verification",
+      "version": "0.1.0",
+      "keywords": ["glb", "render", "3d", "png", "visualization"]
+    },
+    {
+      "name": "gltf-transform",
+      "source": "./plugins/gltf-transform",
+      "description": "Optimize and post-process GLB/glTF 3D models",
+      "version": "0.1.0",
+      "keywords": ["gltf", "glb", "optimize", "compress", "draco", "meshopt"]
     }
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "name": "gltf-transform",
+  "version": "0.1.0",
+  "description": "Optimize and post-process GLB/glTF 3D models",
+  "author": {
+    "name": "Raymond Weitekamp",
+    "email": "raymond@nething.xyz"
+  },
+  "homepage": "https://github.com/rawwerks/VibeCAD",
+  "repository": "https://github.com/rawwerks/VibeCAD",
+  "license": "MIT",
+  "keywords": ["gltf", "glb", "optimize", "compress", "draco", "meshopt", "3d"]
+}
