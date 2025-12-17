@@ -59,13 +59,13 @@ jobs:
       - name: Set up Python
         run: uv python install 3.11
 
-      - name: Run numbered examples (01-27)
+      - name: Run core examples (01-08)
         working-directory: plugins/build123d/skills/build123d/references/examples
         run: |
-          echo "Testing numbered examples..."
+          echo "Testing core examples (01-08)..."
           failed=0
 
-          for f in [0-2][0-9]_*.py; do
+          for f in 0[1-8]_*.py; do
             if [ -f "$f" ]; then
               echo "=== Testing $f ==="
               if uvx --from build123d python "$f" 2>&1; then
@@ -79,11 +79,88 @@ jobs:
           done
 
           if [ $failed -gt 0 ]; then
-            echo "::error::$failed example(s) failed"
+            echo "::error::$failed core example(s) failed"
             exit 1
           fi
+          echo "All core examples passed!"
 
-          echo "All numbered examples passed!"
+      - name: Run bd_warehouse examples (09-14)
+        working-directory: plugins/build123d/skills/build123d/references/examples
+        run: |
+          echo "Testing bd_warehouse examples (09-14)..."
+          failed=0
+
+          for f in 09_*.py 1[0-4]_*.py; do
+            if [ -f "$f" ]; then
+              echo "=== Testing $f ==="
+              if uvx --from build123d --with bd-warehouse python "$f" 2>&1; then
+                echo "✓ $f passed"
+              else
+                echo "✗ $f FAILED"
+                failed=$((failed + 1))
+              fi
+              echo ""
+            fi
+          done
+
+          if [ $failed -gt 0 ]; then
+            echo "::error::$failed bd_warehouse example(s) failed"
+            exit 1
+          fi
+          echo "All bd_warehouse examples passed!"
+
+      - name: Run gggears examples (15-20)
+        working-directory: plugins/build123d/skills/build123d/references/examples
+        run: |
+          echo "Testing gggears examples (15-20)..."
+          failed=0
+
+          # gggears is installed from GitHub, not PyPI
+          GGGEARS="gggears @ git+https://github.com/GarryBGoode/gggears"
+
+          for f in 1[5-9]_*.py 20_*.py; do
+            if [ -f "$f" ]; then
+              echo "=== Testing $f ==="
+              if uvx --from build123d --with "$GGGEARS" python "$f" 2>&1; then
+                echo "✓ $f passed"
+              else
+                echo "✗ $f FAILED"
+                failed=$((failed + 1))
+              fi
+              echo ""
+            fi
+          done
+
+          if [ $failed -gt 0 ]; then
+            echo "::error::$failed gggears example(s) failed"
+            exit 1
+          fi
+          echo "All gggears examples passed!"
+
+      - name: Run blind spot examples (21-27)
+        working-directory: plugins/build123d/skills/build123d/references/examples
+        run: |
+          echo "Testing blind spot examples (21-27)..."
+          failed=0
+
+          for f in 2[1-7]_*.py; do
+            if [ -f "$f" ]; then
+              echo "=== Testing $f ==="
+              if uvx --from build123d python "$f" 2>&1; then
+                echo "✓ $f passed"
+              else
+                echo "✗ $f FAILED"
+                failed=$((failed + 1))
+              fi
+              echo ""
+            fi
+          done
+
+          if [ $failed -gt 0 ]; then
+            echo "::error::$failed blind spot example(s) failed"
+            exit 1
+          fi
+          echo "All blind spot examples passed!"
 
       - name: Run harness on examples with 'result' variable
         working-directory: plugins/build123d/skills/build123d
