@@ -1,5 +1,23 @@
 # Claude Code Instructions
 
+## Plugin Versioning (MANDATORY)
+
+**When modifying ANY plugin, you MUST bump the version in `plugin.json`:**
+
+| Change Type | Version Bump | Example |
+|-------------|--------------|---------|
+| New skill added | MINOR | 0.1.0 → 0.2.0 |
+| Skill modified | PATCH | 0.2.0 → 0.2.1 |
+| Breaking change | MAJOR | 0.2.1 → 1.0.0 |
+| Bug fix | PATCH | 0.2.1 → 0.2.2 |
+
+```bash
+# After ANY plugin change, update version in:
+plugins/<name>/.claude-plugin/plugin.json
+```
+
+**Why:** The `claude plugin update` command checks version strings to detect updates. If you don't bump the version, users won't get your changes.
+
 ## Plan Mode Workflow
 
 When exiting plan mode, **always convert the plan to bd epics and issues first**:
