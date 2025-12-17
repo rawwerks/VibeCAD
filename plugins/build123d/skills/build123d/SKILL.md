@@ -175,7 +175,7 @@ After exporting GLB, you can optimize and verify:
 
 ```bash
 # 1. Optimize for web delivery (optional)
-npx @gltf-transform/cli optimize model.glb optimized.glb --compress draco
+bunx @gltf-transform/cli optimize model.glb optimized.glb --compress draco
 
 # 2. Render to image for visual verification
 npx render-glb model.glb preview.png

@@ -11,12 +11,12 @@ Post-process GLB/glTF files: optimize, compress, inspect, and transform 3D model
 - GitHub: https://github.com/donmccurdy/glTF-Transform
 - npm: `@gltf-transform/cli`
 
-## Zero-Setup with npx
+## Zero-Setup with bunx
 
 No installation required. Run any command with:
 
 ```bash
-npx @gltf-transform/cli <command> [args]
+bunx @gltf-transform/cli <command> [args]
 ```
 
 First run downloads the tool, subsequent runs are instant.
@@ -25,10 +25,10 @@ First run downloads the tool, subsequent runs are instant.
 
 ```bash
 # Inspect model stats first
-npx @gltf-transform/cli inspect model.glb
+bunx @gltf-transform/cli inspect model.glb
 
 # One-command optimization (good defaults)
-npx @gltf-transform/cli optimize input.glb output.glb --compress draco --texture-compress webp
+bunx @gltf-transform/cli optimize input.glb output.glb --compress draco --texture-compress webp
 ```
 
 ## CAD Workflow Integration
@@ -53,30 +53,30 @@ create geometry → export GLB → optimize → verify visually
 
 ```bash
 # Draco - best geometry compression
-npx @gltf-transform/cli draco input.glb output.glb
+bunx @gltf-transform/cli draco input.glb output.glb
 
 # Meshopt - geometry + animation compression
-npx @gltf-transform/cli meshopt input.glb output.glb
+bunx @gltf-transform/cli meshopt input.glb output.glb
 
 # Quantize only - no external decoder needed
-npx @gltf-transform/cli quantize input.glb output.glb
+bunx @gltf-transform/cli quantize input.glb output.glb
 ```
 
 ## Texture Compression
 
 ```bash
 # WebP - good compression, wide browser support
-npx @gltf-transform/cli webp input.glb output.glb
+bunx @gltf-transform/cli webp input.glb output.glb
 
 # Resize large textures
-npx @gltf-transform/cli resize input.glb output.glb --width 1024 --height 1024
+bunx @gltf-transform/cli resize input.glb output.glb --width 1024 --height 1024
 ```
 
 ## Common Operations
 
 ### Inspect Model Stats
 ```bash
-npx @gltf-transform/cli inspect model.glb
+bunx @gltf-transform/cli inspect model.glb
 ```
 
 Shows vertex count, file size breakdown, texture sizes - helps decide what to optimize.
@@ -84,22 +84,22 @@ Shows vertex count, file size breakdown, texture sizes - helps decide what to op
 ### Simplify Geometry
 ```bash
 # Weld duplicate vertices first
-npx @gltf-transform/cli weld input.glb temp.glb
+bunx @gltf-transform/cli weld input.glb temp.glb
 
 # Then simplify
-npx @gltf-transform/cli simplify temp.glb output.glb --ratio 0.5
+bunx @gltf-transform/cli simplify temp.glb output.glb --ratio 0.5
 ```
 
 Useful for CAD models which often have more detail than needed for web viewing.
 
 ### Merge Multiple Models
 ```bash
-npx @gltf-transform/cli merge part1.glb part2.glb assembly.glb
+bunx @gltf-transform/cli merge part1.glb part2.glb assembly.glb
 ```
 
 ### Aggressive Optimization
 ```bash
-npx @gltf-transform/cli optimize input.glb output.glb \
+bunx @gltf-transform/cli optimize input.glb output.glb \
   --compress draco \
   --texture-compress webp \
   --simplify true \
