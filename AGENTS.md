@@ -12,6 +12,14 @@ bd close <id>         # Complete work
 bd sync               # Sync with git
 ```
 
+## Planning
+
+**Convert all plans to bd epics/issues with full notes and dependency graphs.** When you create a plan file, translate it into:
+- An epic for the overall effort
+- Individual issues for each task
+- Dependencies between issues (`bd dep add`)
+- Full context in issue bodies
+
 ## Landing the Plane (Session Completion)
 
 **When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
