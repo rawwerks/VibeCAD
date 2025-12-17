@@ -115,10 +115,13 @@ jobs:
           echo "Testing gggears examples (15-20)..."
           failed=0
 
+          # gggears is installed from GitHub, not PyPI
+          GGGEARS="gggears @ git+https://github.com/GarryBGoode/gggears"
+
           for f in 1[5-9]_*.py 20_*.py; do
             if [ -f "$f" ]; then
               echo "=== Testing $f ==="
-              if uvx --from build123d --with gggears python "$f" 2>&1; then
+              if uvx --from build123d --with "$GGGEARS" python "$f" 2>&1; then
                 echo "✓ $f passed"
               else
                 echo "✗ $f FAILED"
