@@ -27,6 +27,7 @@ After installation, invoke skills using the format `<plugin-name>:<skill-name>`:
 | Plugin | Skill Invocation |
 |--------|------------------|
 | build123d | `build123d:build123d` |
+| build123d | `build123d:model-compare` |
 | render-glb | `render-glb:render-glb` |
 | gltf-transform | `gltf-transform:gltf-transform` |
 
@@ -38,11 +39,17 @@ Skills are automatically triggered when Claude detects relevant tasks (CAD model
 
 Skills for using [Build123D](https://github.com/gumyr/build123d) - a Python CAD library for creating parametric 3D models with code.
 
+**Skills:**
+- `build123d` - CAD modeling with algebra-style syntax
+- `model-compare` - Compare 3D models using IoU, Dice, precision/recall metrics
+
+**Features:**
 - Algebra-style syntax for intuitive model creation
 - Parametric design patterns
 - Export to GLB, STL, STEP, and other formats
 - Includes bd_warehouse (threads, fasteners, pipes, flanges, bearings)
 - Includes gggears (spur, helical, bevel, planetary, cycloid gears)
+- Model comparison for evaluating ML-generated models against gold references
 
 ### render-glb
 
