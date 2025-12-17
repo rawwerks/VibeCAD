@@ -7,10 +7,10 @@ description: Render GLB 3D models to PNG images for visual verification. Use whe
 
 Render 3D GLB files to PNG images so agents can **visually verify their work**.
 
-## Zero-Setup with npx
+## Zero-Setup with bunx
 
 ```bash
-npx render-glb model.glb output.png
+bunx render-glb model.glb output.png
 ```
 
 No installation required. First run downloads the tool, subsequent runs are instant.
@@ -28,7 +28,7 @@ Agents can generate 3D models but typically can't see them. This creates a **vis
 
 ```bash
 # Render with defaults (good for most cases)
-npx render-glb model.glb preview.png
+bunx render-glb model.glb preview.png
 
 # Then read the image to see your work
 # (use Read tool on preview.png)
@@ -37,7 +37,7 @@ npx render-glb model.glb preview.png
 ## Options
 
 ```bash
-npx render-glb <input.glb> <output.png> [options]
+bunx render-glb <input.glb> <output.png> [options]
 
 Options:
   --width <n>      Image width in pixels (default: 800)
@@ -58,7 +58,7 @@ export_gltf(model, "./model.glb", binary=True)
 
 ```bash
 # 2. Render to image
-npx render-glb model.glb preview.png
+bunx render-glb model.glb preview.png
 ```
 
 ```

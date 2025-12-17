@@ -178,7 +178,7 @@ After exporting GLB, you can optimize and verify:
 bunx @gltf-transform/cli optimize model.glb optimized.glb --compress draco
 
 # 2. Render to image for visual verification
-npx render-glb model.glb preview.png
+bunx render-glb model.glb preview.png
 ```
 
 See:
