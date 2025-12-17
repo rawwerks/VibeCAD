@@ -55,23 +55,19 @@ uvx --from build123d python my_model.py
 
 ## Geometry Inspection (Optional)
 
-Use the harness script to get geometry properties:
+To inspect geometry properties, add this to your script:
 
-```bash
-uvx --from build123d python scripts/harness.py my_model.py
-```
-
-Your script must define a `result` variable:
 ```python
-result = final_shape  # Harness looks for this
+def inspect(shape):
+    bbox = shape.bounding_box()
+    print(f"Size: {bbox.max.X - bbox.min.X:.1f} x {bbox.max.Y - bbox.min.Y:.1f} x {bbox.max.Z - bbox.min.Z:.1f}")
+    print(f"Volume: {shape.volume:.1f}")
+    print(f"Faces: {len(shape.faces())}, Edges: {len(shape.edges())}")
+
+inspect(result)
 ```
 
-The harness outputs:
-- Bounding box (min, max, size)
-- Volume and surface area
-- Center of mass
-- Topology (vertices, edges, faces, solids)
-- GLB export
+A full inspection harness is available in `scripts/harness.py` for advanced use.
 
 ## Quick Reference
 
