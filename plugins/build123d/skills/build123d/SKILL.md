@@ -169,17 +169,21 @@ assembly = gear1.build_part() + gear2.build_part()
 export_gltf(assembly, "./gears.glb", binary=True)
 ```
 
-## Visual Verification
+## Post-Processing Pipeline
 
-To **see** your generated models, use the `render-glb` skill:
+After exporting GLB, you can optimize and verify:
 
 ```bash
-# After exporting GLB
+# 1. Optimize for web delivery (optional)
+gltf-transform optimize model.glb optimized.glb --compress draco
+
+# 2. Render to image for visual verification
 npx render-glb model.glb preview.png
-# Then read preview.png to see what you built
 ```
 
-See `skills/render-glb/SKILL.md` for the full visual verification workflow.
+See:
+- `skills/gltf-transform/SKILL.md` - compress, simplify, merge models
+- `skills/render-glb/SKILL.md` - visual verification workflow
 
 ## Source Repositories
 
