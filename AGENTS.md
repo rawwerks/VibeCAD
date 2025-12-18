@@ -46,6 +46,24 @@ bd sync               # Sync with git
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
 
+## Local Testing
+
+**No pre-push hooks** - CI runs on PRs and the feedback loop is short enough.
+
+Test the specific file you changed while developing:
+```bash
+# Test a Python script directly
+uvx --from build123d python your_script.py
+
+# Test model-compare
+uvx --from build123d python plugins/build123d/skills/model-compare/scripts/model_diff.py --demo
+
+# Test with extensions
+uvx --from build123d --with bd-warehouse python your_script.py
+```
+
+Full CI runs automatically on PRs. Test locally first, then push.
+
 ## Adding Skills to VibeCAD
 
 ### Skill Structure

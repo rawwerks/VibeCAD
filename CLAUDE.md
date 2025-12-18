@@ -42,6 +42,24 @@ bd close <id> --reason="..."
 bd dep add <issue> <depends-on>
 ```
 
+## Local Testing
+
+**No pre-push hooks** - CI runs on PRs and the feedback loop is short enough.
+
+When developing, test the specific file you changed:
+```bash
+# Test a Python script directly
+uvx --from build123d python your_script.py
+
+# Test model-compare
+uvx --from build123d python plugins/build123d/skills/model-compare/scripts/model_diff.py --demo
+
+# Test with extensions
+uvx --from build123d --with bd-warehouse python your_script.py
+```
+
+Full CI runs automatically on PRs. Don't wait for CI - test locally first.
+
 ## Session End Protocol
 
 Before ending any session:
