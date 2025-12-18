@@ -1,11 +1,11 @@
 ---
 name: model-compare
-description: Compare 3D CAD models using boolean operations (IoU, Dice, precision/recall). Use when evaluating generated models against gold references, diffing CAD revisions, or computing similarity metrics for ML training. Triggers on: model diff, compare models, IoU, intersection over union, model similarity, CAD comparison, STEP diff, 3D evaluation, gold reference, generated model, precision recall 3D.
+description: Compare 3D CAD models using boolean operations (IoU, missing/extra geometry). Use when evaluating generated models against gold references, diffing CAD revisions, or computing similarity metrics for ML training. Triggers on: model diff, compare models, IoU, intersection over union, model similarity, CAD comparison, STEP diff, 3D evaluation, gold reference, generated model.
 ---
 
 # 3D Model Comparison Tool
 
-Compare CAD models using boolean operations to compute similarity metrics like IoU, Dice, precision, and recall. Useful for:
+Compare CAD models using boolean operations to compute similarity metrics. Useful for:
 
 - Evaluating ML-generated models against gold references
 - Comparing revisions of CAD designs
@@ -35,14 +35,13 @@ uvx --from build123d python scripts/model_diff.py --demo
 
 ## Output Metrics
 
-### Primary Metrics (for ML training)
+### Primary Metrics
 
 | Metric | Range | Description |
 |--------|-------|-------------|
-| **IoU** (Jaccard) | 0-1 | `|A∩B| / |A∪B|` - standard similarity |
-| **Dice** (F1) | 0-1 | `2|A∩B| / (|A|+|B|)` - more sensitive to small overlaps |
-| **Precision** | 0-1 | `|A∩B| / |B|` - how much of generated is correct |
-| **Recall** | 0-1 | `|A∩B| / |A|` - how much of reference was captured |
+| **IoU** (Jaccard) | 0-1 | `|A∩B| / |A∪B|` - overall similarity (1.0 = identical) |
+| **Missing %** | 0-100 | `|A-B| / |A|` - geometry in reference but not in generated |
+| **Extra %** | 0-100 | `|B-A| / |B|` - geometry in generated but not in reference |
 
 ### Diagnostic Metrics
 
@@ -57,8 +56,8 @@ uvx --from build123d python scripts/model_diff.py --demo
 ### Interpretation
 
 The tool provides automatic interpretation:
-- **Over-generating**: Low precision, high extra geometry
-- **Under-generating**: Low recall, missing geometry
+- **Over-generating**: High extra % means you added geometry that shouldn't exist
+- **Under-generating**: High missing % means you left out geometry from the reference
 - **Size issues**: Volume ratio far from 1.0
 - **Position issues**: Large center offset
 
@@ -99,8 +98,8 @@ for gen in outputs/*.step; do
     uvx --from build123d python model_diff.py gold.step "$gen" --json --no-export
 done | jq -s '{
     avg_iou: (map(.iou) | add / length),
-    avg_precision: (map(.precision) | add / length),
-    avg_recall: (map(.recall) | add / length)
+    avg_missing: (map(.missing_pct) | add / length),
+    avg_extra: (map(.extra_pct) | add / length)
 }'
 ```
 
@@ -109,8 +108,10 @@ done | jq -s '{
 ```python
 # In your training code, use metrics for loss:
 loss = (
-    (1 - metrics['iou']) * 1.0 +           # Primary shape match
-    abs(1 - metrics['volume_ratio']) * 0.5 + # Scale accuracy
+    (1 - metrics['iou']) * 1.0 +             # Primary shape match
+    metrics['missing_pct'] * 0.5 +           # Penalize under-generation
+    metrics['extra_pct'] * 0.5 +             # Penalize over-generation
+    abs(1 - metrics['volume_ratio']) * 0.3 + # Scale accuracy
     metrics['center_offset'] * 0.1           # Position accuracy
 )
 ```
@@ -125,10 +126,9 @@ Extra    = Generated - Reference  (B - A)
 Common   = Reference & Generated  (A ∩ B)
 Union    = Reference + Generated  (A ∪ B)
 
-IoU      = volume(Common) / volume(Union)
-Dice     = 2 * volume(Common) / (volume(A) + volume(B))
-Precision = volume(Common) / volume(B)
-Recall    = volume(Common) / volume(A)
+IoU        = volume(Common) / volume(Union)
+Missing %  = volume(Missing) / volume(A)
+Extra %    = volume(Extra) / volume(B)
 ```
 
 ## Sample Output
@@ -148,12 +148,12 @@ Recall    = volume(Common) / volume(A)
 
 ──────────────────────── PRIMARY METRICS ────────────────────────
   IoU (Jaccard):              0.7683  (1.0 = identical)
-  Dice (F1):                  0.8690  (1.0 = identical)
-  Precision:                  0.9213  (correctness of B)
-  Recall:                     0.8223  (coverage of A)
+  Missing:                    17.8%  (geometry in A but not B)
+  Extra:                       7.9%  (geometry in B but not A)
 
 ──────────────────────── INTERPRETATION ─────────────────────────
   △ Partial match (IoU > 50%)
+  → Over-generating: 7.9% of B is extra geometry
   → Under-generating: 17.8% of A is missing
   → Undersized by 10.8%
 =================================================================

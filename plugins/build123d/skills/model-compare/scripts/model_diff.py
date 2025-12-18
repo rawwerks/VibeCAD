@@ -11,9 +11,8 @@ Supported formats: STEP (.step, .stp), BREP (.brep), STL (.stl)
 
 Computes:
     - IoU (Intersection over Union) - primary similarity metric
-    - Dice coefficient (F1 score for volumes)
-    - Precision (how much of generated is correct)
-    - Recall (how much of reference was captured)
+    - Missing % - what fraction of the reference is missing from generated
+    - Extra % - what fraction of the generated is not in reference
     - Spatial metrics (center offset, bounding box, size ratios)
 
 Outputs:
@@ -128,23 +127,15 @@ def compute_metrics(reference, generated, common):
     # Range: 0 (no overlap) to 1 (identical)
     metrics["iou"] = vol_common / vol_union if vol_union > 0 else 1.0
 
-    # Dice coefficient (F1 score for volumes)
-    # More sensitive than IoU for small overlaps
-    # Dice = 2 * |A ∩ B| / (|A| + |B|)
-    denom = vol_ref + vol_gen
-    metrics["dice"] = 2 * vol_common / denom if denom > 0 else 1.0
+    # Missing geometry: what fraction of reference is NOT in generated
+    # High missing = under-generation, you left stuff out
+    vol_missing = vol_ref - vol_common
+    metrics["missing_pct"] = vol_missing / vol_ref if vol_ref > 0 else 0.0
 
-    # Precision: How much of generated is correct?
-    # High precision = not much extra/wrong geometry
-    metrics["precision"] = vol_common / vol_gen if vol_gen > 0 else 0.0
-
-    # Recall: How much of reference did we capture?
-    # High recall = captured most of the target
-    metrics["recall"] = vol_common / vol_ref if vol_ref > 0 else 0.0
-
-    # F1 from precision/recall (should match dice)
-    p, r = metrics["precision"], metrics["recall"]
-    metrics["f1"] = 2 * p * r / (p + r) if (p + r) > 0 else 0.0
+    # Extra geometry: what fraction of generated is NOT in reference
+    # High extra = over-generation, you added stuff that shouldn't be there
+    vol_extra = vol_gen - vol_common
+    metrics["extra_pct"] = vol_extra / vol_gen if vol_gen > 0 else 0.0
 
     # === Volume Metrics ===
 
@@ -266,9 +257,8 @@ def print_report(reference, generated, missing, extra, common, metrics):
     # Primary metrics
     print(f"\n{'─── PRIMARY METRICS ───':─^65}")
     print(f"  IoU (Jaccard):      {metrics['iou']:>14.4f}  (1.0 = identical)")
-    print(f"  Dice (F1):          {metrics['dice']:>14.4f}  (1.0 = identical)")
-    print(f"  Precision:          {metrics['precision']:>14.4f}  (correctness of B)")
-    print(f"  Recall:             {metrics['recall']:>14.4f}  (coverage of A)")
+    print(f"  Missing:            {100 * metrics['missing_pct']:>13.1f}%  (geometry in A but not B)")
+    print(f"  Extra:              {100 * metrics['extra_pct']:>13.1f}%  (geometry in B but not A)")
 
     # Diagnostic metrics
     print(f"\n{'─── DIAGNOSTIC METRICS ───':─^65}")
@@ -304,10 +294,10 @@ def print_report(reference, generated, missing, extra, common, metrics):
     else:
         print("  ✗ Poor match (IoU < 50%)")
 
-    if metrics['precision'] < metrics['recall'] - 0.05:
-        print(f"  → Over-generating: {100 * (1 - metrics['precision']):.1f}% of B is extra geometry")
-    elif metrics['recall'] < metrics['precision'] - 0.05:
-        print(f"  → Under-generating: {100 * (1 - metrics['recall']):.1f}% of A is missing")
+    if metrics['extra_pct'] > 0.05:
+        print(f"  → Over-generating: {100 * metrics['extra_pct']:.1f}% of B is extra geometry")
+    if metrics['missing_pct'] > 0.05:
+        print(f"  → Under-generating: {100 * metrics['missing_pct']:.1f}% of A is missing")
 
     if metrics['volume_ratio'] < 0.95:
         print(f"  → Undersized by {100 * (1 - metrics['volume_ratio']):.1f}%")
