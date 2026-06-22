@@ -1,6 +1,6 @@
 ---
 name: model-compare
-description: Compare 3D CAD models using boolean operations (IoU, Dice, precision/recall). Use when evaluating generated models against gold references, diffing CAD revisions, or computing similarity metrics for ML training. Triggers on: model diff, compare models, IoU, intersection over union, model similarity, CAD comparison, STEP diff, 3D evaluation, gold reference, generated model, precision recall 3D.
+description: "Compare 3D CAD models using boolean operations (IoU, Dice, precision/recall). Use when evaluating generated models against gold references, diffing CAD revisions, or computing similarity metrics for ML training. Triggers on: model diff, compare models, IoU, intersection over union, model similarity, CAD comparison, STEP diff, 3D evaluation, gold reference, generated model, precision recall 3D."
 ---
 
 # 3D Model Comparison Tool
